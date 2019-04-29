@@ -11,20 +11,20 @@ namespace PrettyLines
     /// </summary>
     public class Game1 : Game
     {
-        GraphicsDeviceManager _graphics;
-        SpriteBatch _spriteBatch;
+        readonly GraphicsDeviceManager graphics;
+        SpriteBatch spriteBatch;
 
-        private LineFactory _factory;
+        private LineFactory factory;
 
-        private List<I2DLine> _lines;
+        private List<I2DLine> lines;
 
-        private IThick2DLine _mouse;
+        private IThick2DLine mouse;
 
-        private int _wheel;
+        private int wheel;
 
         public Game1()
         {
-            _graphics = new GraphicsDeviceManager(this);
+            graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
 
@@ -38,17 +38,17 @@ namespace PrettyLines
         {
             // TODO: Add your initialization logic here
 
-            _factory = new LineFactory(_graphics);
+            factory = new LineFactory(graphics.GraphicsDevice);
 
-            _lines = new List<I2DLine>();
+            lines = new List<I2DLine>();
 
-            _lines.Add(_factory.GetSimpleLine(new Vector2(100, 100), new Vector2(200, 200), Color.Red));
-            _lines.Add(_factory.GetThickLine(new Vector2(200, 200), new Vector2(300, 100), Color.Red, 5));
-            _lines.Add(_factory.GetBezierCurve(new Vector2(200, 300), new Vector2(100, 200), Color.Red, 5));
-            _lines.Add(_factory.GetBezierCurve(new Vector2(200, 300), new Vector2(300, 200), Color.Red, 5));
+            lines.Add(factory.GetSimpleLine(new Vector2(100, 100), new Vector2(200, 200), Color.Red));
+            lines.Add(factory.GetThickLine(new Vector2(200, 200), new Vector2(300, 100), Color.Red, 5));
+            lines.Add(factory.GetBezierCurve(new Vector2(200, 300), new Vector2(100, 200), Color.Red, 5));
+            lines.Add(factory.GetBezierCurve(new Vector2(200, 300), new Vector2(300, 200), Color.Red, 5));
 
-            _mouse = _factory.GetBezierCurve(
-                new Vector2(_graphics.PreferredBackBufferWidth * 0.5f, _graphics.PreferredBackBufferHeight * 0.5f),
+            mouse = factory.GetBezierCurve(
+                new Vector2(graphics.PreferredBackBufferWidth * 0.5f, graphics.PreferredBackBufferHeight * 0.5f),
                 Vector2.Zero, Color.Gray, 5);
 
             base.Initialize();
@@ -61,7 +61,7 @@ namespace PrettyLines
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
         }
@@ -95,26 +95,26 @@ namespace PrettyLines
                 switch (key)
                 {
                     case Keys.NumPad1:
-                        _mouse = _factory.GetThickLine(_mouse.Start, _mouse.End, _mouse.Color, _mouse.Thickness);
+                        mouse = factory.GetThickLine(mouse.Start, mouse.End, mouse.Color, mouse.Thickness);
                         break;
                     case Keys.NumPad2:
-                        _mouse = _factory.GetAngledLine(_mouse.Start, _mouse.End, _mouse.Color, _mouse.Thickness);
+                        mouse = factory.GetAngledLine(mouse.Start, mouse.End, mouse.Color, mouse.Thickness);
                         break;
                     case Keys.NumPad3:
-                        _mouse = _factory.GetBezierCurve(_mouse.Start, _mouse.End, _mouse.Color, _mouse.Thickness);
+                        mouse = factory.GetBezierCurve(mouse.Start, mouse.End, mouse.Color, mouse.Thickness);
                         break;
                 }
             }
 
             var mouseState = Mouse.GetState();
-            _mouse.End = new Vector2(mouseState.X, mouseState.Y);
+            mouse.End = new Vector2(mouseState.X, mouseState.Y);
 
-            if (_wheel != mouseState.ScrollWheelValue)
+            if (wheel != mouseState.ScrollWheelValue)
             {
-                _mouse.Thickness = _wheel < mouseState.ScrollWheelValue ? _mouse.Thickness + 1 : _mouse.Thickness - 1;
+                mouse.Thickness = wheel < mouseState.ScrollWheelValue ? mouse.Thickness + 1 : mouse.Thickness - 1;
             }
 
-            _wheel = mouseState.ScrollWheelValue;
+            wheel = mouseState.ScrollWheelValue;
 
             base.Update(gameTime);
         }
@@ -129,12 +129,12 @@ namespace PrettyLines
 
             // TODO: Add your drawing code here
 
-            foreach (var line in _lines)
+            foreach (var line in lines)
             {
                 line.Draw();
             }
 
-            _mouse.Draw();
+            mouse.Draw();
 
             base.Draw(gameTime);
         }

@@ -6,64 +6,64 @@ namespace PrettyLinesLib
 {
     public class BezierCurve : IThick2DLine
     {
-        private readonly BasicEffect _effect;
-        private readonly GraphicsDevice _device;
-        private VertexBuffer _buffer;
+        private readonly BasicEffect effect;
+        private readonly GraphicsDevice device;
+        private VertexBuffer buffer;
 
-        private Vector2 _start;
-        private Vector2 _end;
-        private Color _color;
-        private int _segments;
-        private float _thickness;
+        private Vector2 start;
+        private Vector2 end;
+        private Color color;
+        private int segments;
+        private float thickness;
 
         #region Properties
 
         public Vector2 Start
         {
-            get { return _start; }
+            get { return start; }
             set
             {
-                _start = value;
+                start = value;
                 UpdateBuffer();
             }
         }
 
         public Vector2 End
         {
-            get { return _end; }
+            get { return end; }
             set
             {
-                _end = value;
+                end = value;
                 UpdateBuffer();
             }
         }
 
         public Color Color
         {
-            get { return _color; }
+            get { return color; }
             set
             {
-                _color = value;
+                color = value;
                 UpdateBuffer();
             }
         }
 
         public int Segments
         {
-            get { return _segments; }
+            get { return segments; }
             set
             {
-                _segments = value;
+                segments = value;
                 ChangeResolution();
             }
         }
 
         public float Thickness
         {
-            get { return _thickness; }
+            get { return thickness; }
             set
             {
-                _thickness = value;
+                thickness = value;
                 UpdateBuffer();
             }
         }
@@ -73,70 +73,70 @@ namespace PrettyLinesLib
         public BezierCurve(BasicEffect effect, GraphicsDevice device, Vector2 start, Vector2 end, Color color,
             int segments, float thickness)
         {
-            _effect = effect;
-            _device = device;
-            _start = start;
-            _end = end;
-            _color = color;
-            _segments = segments;
-            _thickness = thickness;
-            _buffer = new VertexBuffer(device, typeof(VertexPositionColor), segments * 2 + 2, BufferUsage.WriteOnly);
+            this.effect = effect;
+            this.device = device;
+            this.start = start;
+            this.end = end;
+            this.color = color;
+            this.segments = segments;
+            this.thickness = thickness;
+            buffer = new VertexBuffer(device, typeof(VertexPositionColor), segments * 2 + 2, BufferUsage.WriteOnly);
             UpdateBuffer();
         }
 
         public void Draw()
         {
-            _device.SetVertexBuffer(_buffer);
+            device.SetVertexBuffer(buffer);
 
-            var temp = _device.RasterizerState;
+            var temp = device.RasterizerState;
 
             var state = new RasterizerState();
 
             state.MultiSampleAntiAlias = true;
             state.CullMode = CullMode.None;
 
-            _device.RasterizerState = state;
+            device.RasterizerState = state;
 
-            foreach (var pass in _effect.CurrentTechnique.Passes)
+            foreach (var pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                _device.DrawPrimitives(PrimitiveType.TriangleStrip, 0, _segments * 2);
+                device.DrawPrimitives(PrimitiveType.TriangleStrip, 0, segments * 2);
             }
 
-            _device.SetVertexBuffer(null);
-            _device.RasterizerState = temp;
+            device.SetVertexBuffer(null);
+            device.RasterizerState = temp;
         }
 
         private void ChangeResolution()
         {
-            _buffer = new VertexBuffer(_device, typeof(VertexPositionColor), _segments * 2 + 2, BufferUsage.WriteOnly);
+            buffer = new VertexBuffer(device, typeof(VertexPositionColor), segments * 2 + 2, BufferUsage.WriteOnly);
             UpdateBuffer();
         }
 
         private void UpdateBuffer()
         {
-            List<VertexPositionColor> vertex = new List<VertexPositionColor>(_segments * 2 + 2);
+            List<VertexPositionColor> vertex = new List<VertexPositionColor>(segments * 2 + 2);
 
-            Vector2 toAdd = new Vector2(0, _thickness * -0.5f);
+            Vector2 toAdd = new Vector2(0, thickness * -0.5f);
 
             Vector2 last = Vector2.Zero;
 
-            for (int i = 0; i < _segments + 1; i++)
+            for (int i = 0; i < segments + 1; i++)
             {
-                float bezierTime = 1.0f / _segments * i;
-                Vector2 t = CalculateBezierPoint(bezierTime, _start, _end);
+                float bezierTime = 1.0f / segments * i;
+                Vector2 t = CalculateBezierPoint(bezierTime, start, end);
 
-                if (i > 0 && i < _segments)
+                if (i > 0 && i < segments)
                 {
                     t = Vector2.SmoothStep(last, t, 0.5f);
                 }
 
-                vertex.Add(new VertexPositionColor(new Vector3(t + toAdd, 0), _color));
-                vertex.Add(new VertexPositionColor(new Vector3(t - toAdd, 0), _color));
+                vertex.Add(new VertexPositionColor(new Vector3(t + toAdd, 0), color));
+                vertex.Add(new VertexPositionColor(new Vector3(t - toAdd, 0), color));
                 last = t;
             }
 
-            _buffer.SetData(vertex.ToArray());
+            buffer.SetData(vertex.ToArray());
         }
 
         private Vector2 CalculateBezierPoint(float t, Vector2 v1, Vector2 v4)

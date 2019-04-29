@@ -5,42 +5,42 @@ namespace PrettyLinesLib
 {
     public class SimpleLine : I2DLine
     {
-        private readonly BasicEffect _effect;
-        private readonly GraphicsDevice _device;
-        private readonly VertexBuffer _buffer;
+        private readonly BasicEffect effect;
+        private readonly GraphicsDevice device;
+        private readonly VertexBuffer buffer;
 
-        private Vector2 _start;
-        private Vector2 _end;
-        private Color _color;
+        private Vector2 start;
+        private Vector2 end;
+        private Color color;
 
         #region Properties
 
         public Vector2 Start
         {
-            get { return _start; }
+            get { return start; }
             set
             {
-                _start = value;
+                start = value;
                 UpdateBuffer();
             }
         }
 
         public Vector2 End
         {
-            get { return _end; }
+            get { return end; }
             set
             {
-                _end = value;
+                end = value;
                 UpdateBuffer();
             }
         }
 
         public Color Color
         {
-            get { return _color; }
+            get { return color; }
             set
             {
-                _color = value;
+                color = value;
                 UpdateBuffer();
             }
         }
@@ -49,45 +49,45 @@ namespace PrettyLinesLib
 
         public SimpleLine(Vector2 start, Vector2 end, Color color, BasicEffect effect, GraphicsDevice device)
         {
-            _start = start;
-            _end = end;
-            _color = color;
-            _effect = effect;
-            _device = device;
-            _buffer = new VertexBuffer(device, typeof(VertexPositionColor), 2, BufferUsage.WriteOnly);
+            this.start = start;
+            this.end = end;
+            this.color = color;
+            this.effect = effect;
+            this.device = device;
+            buffer = new VertexBuffer(device, typeof(VertexPositionColor), 2, BufferUsage.WriteOnly);
             UpdateBuffer();
         }
 
         public void Draw()
         {
-            _device.SetVertexBuffer(_buffer);
+            device.SetVertexBuffer(buffer);
 
-            var temp = _device.RasterizerState;
+            var temp = device.RasterizerState;
 
             var state = new RasterizerState();
 
             state.MultiSampleAntiAlias = true;
             state.CullMode = CullMode.None;
 
-            _device.RasterizerState = state;
+            device.RasterizerState = state;
 
 
-            foreach (var pass in _effect.CurrentTechnique.Passes)
+            foreach (var pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                _device.DrawPrimitives(PrimitiveType.LineList, 0, 1);
+                device.DrawPrimitives(PrimitiveType.LineList, 0, 1);
             }
 
-            _device.SetVertexBuffer(null);
-            _device.RasterizerState = temp;
+            device.SetVertexBuffer(null);
+            device.RasterizerState = temp;
         }
 
         private void UpdateBuffer()
         {
-            _buffer.SetData(new[]
+            buffer.SetData(new[]
             {
-                new VertexPositionColor(new Vector3(Start, 0), _color),
-                new VertexPositionColor(new Vector3(End, 0), _color)
+                new VertexPositionColor(new Vector3(Start, 0), color),
+                new VertexPositionColor(new Vector3(End, 0), color)
             });
         }
     }

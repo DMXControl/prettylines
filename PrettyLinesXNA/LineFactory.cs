@@ -5,19 +5,19 @@ namespace PrettyLinesLib
 {
     public class LineFactory
     {
-        private GraphicsDevice device;
-        private BasicEffect effect;
+        private readonly GraphicsDevice device;
+        private readonly BasicEffect effect;
 
-        public LineFactory(GraphicsDeviceManager manager)
+        public LineFactory(GraphicsDevice device)
         {
-            device = manager.GraphicsDevice;
-            effect = new BasicEffect(device);
+            this.device = device;
+            effect = new BasicEffect(this.device);
 
             effect.World = Matrix.CreateTranslation(Vector3.Zero);
 
             effect.View = Matrix.CreateLookAt(Vector3.Backward, Vector3.Forward, Vector3.Up);
             effect.Projection =
-                Matrix.CreateOrthographicOffCenter(0, device.Viewport.Width, device.Viewport.Height, 0, -1, 1);
+                Matrix.CreateOrthographicOffCenter(0, this.device.Viewport.Width, this.device.Viewport.Height, 0, -1, 1);
 
             effect.VertexColorEnabled = true;
         }

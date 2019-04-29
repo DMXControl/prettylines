@@ -5,53 +5,53 @@ namespace PrettyLinesLib
 {
     public class ThickLine : IThick2DLine
     {
-        private readonly BasicEffect _effect;
-        private readonly GraphicsDevice _device;
-        private readonly VertexBuffer _buffer;
+        private readonly BasicEffect effect;
+        private readonly GraphicsDevice device;
+        private readonly VertexBuffer buffer;
 
-        private Vector2 _start;
-        private Vector2 _end;
-        private Color _color;
-        private float _thickness;
+        private Vector2 start;
+        private Vector2 end;
+        private Color color;
+        private float thickness;
 
         #region Properties
 
         public Vector2 Start
         {
-            get { return _start; }
+            get { return start; }
             set
             {
-                _start = value;
+                start = value;
                 UpdateBuffer();
             }
         }
 
         public Vector2 End
         {
-            get { return _end; }
+            get { return end; }
             set
             {
-                _end = value;
+                end = value;
                 UpdateBuffer();
             }
         }
 
         public Color Color
         {
-            get { return _color; }
+            get { return color; }
             set
             {
-                _color = value;
+                color = value;
                 UpdateBuffer();
             }
         }
 
         public float Thickness
         {
-            get { return _thickness; }
+            get { return thickness; }
             set
             {
-                _thickness = value;
+                thickness = value;
                 UpdateBuffer();
             }
         }
@@ -61,54 +61,54 @@ namespace PrettyLinesLib
         public ThickLine(Vector2 start, Vector2 end, Color color, float thickness, BasicEffect effect,
             GraphicsDevice device)
         {
-            _start = start;
-            _end = end;
-            _color = color;
-            _thickness = thickness;
-            _effect = effect;
-            _device = device;
-            _buffer = new VertexBuffer(device, typeof(VertexPositionColor), 4, BufferUsage.WriteOnly);
+            this.start = start;
+            this.end = end;
+            this.color = color;
+            this.thickness = thickness;
+            this.effect = effect;
+            this.device = device;
+            buffer = new VertexBuffer(device, typeof(VertexPositionColor), 4, BufferUsage.WriteOnly);
             UpdateBuffer();
         }
 
         public void Draw()
         {
-            _device.SetVertexBuffer(_buffer);
+            device.SetVertexBuffer(buffer);
 
-            var temp = _device.RasterizerState;
+            var temp = device.RasterizerState;
 
             var state = new RasterizerState();
 
             state.MultiSampleAntiAlias = true;
             state.CullMode = CullMode.None;
 
-            _device.RasterizerState = state;
+            device.RasterizerState = state;
 
 
-            foreach (var pass in _effect.CurrentTechnique.Passes)
+            foreach (var pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                _device.DrawPrimitives(PrimitiveType.TriangleStrip, 0, 2);
+                device.DrawPrimitives(PrimitiveType.TriangleStrip, 0, 2);
             }
 
-            _device.SetVertexBuffer(null);
-            _device.RasterizerState = temp;
+            device.SetVertexBuffer(null);
+            device.RasterizerState = temp;
         }
 
         private void UpdateBuffer()
         {
             var matrix = Matrix.CreateRotationZ(MathHelper.PiOver2);
-            var transform = Vector2.Transform((_start - _end), matrix);
+            var transform = Vector2.Transform((start - end), matrix);
             transform.Normalize();
-            var toAdd = transform * _thickness * 0.5f;
+            var toAdd = transform * thickness * 0.5f;
             var data = new[]
             {
-                new VertexPositionColor(new Vector3(_start + toAdd, 0), _color),
-                new VertexPositionColor(new Vector3(_start - toAdd, 0), _color),
-                new VertexPositionColor(new Vector3(_end + toAdd, 0), _color),
-                new VertexPositionColor(new Vector3(_end - toAdd, 0), _color),
+                new VertexPositionColor(new Vector3(start + toAdd, 0), color),
+                new VertexPositionColor(new Vector3(start - toAdd, 0), color),
+                new VertexPositionColor(new Vector3(end + toAdd, 0), color),
+                new VertexPositionColor(new Vector3(end - toAdd, 0), color),
             };
-            _buffer.SetData(data);
+            buffer.SetData(data);
         }
     }
 }
