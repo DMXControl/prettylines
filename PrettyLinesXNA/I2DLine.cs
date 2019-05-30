@@ -8,6 +8,6 @@ namespace PrettyLinesLib
         Vector2 End { get; set; }
         Color Color { get; set; }
 
-        void Draw();
+        void Draw(Matrix transformationMatrix);
     }
 }

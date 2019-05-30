@@ -71,7 +71,7 @@ namespace PrettyLinesLib
             UpdateBuffer();
         }
 
-        public void Draw()
+        public void Draw(Matrix transformationMatrix)
         {
             device.SetVertexBuffer(buffer);
 
@@ -84,6 +84,12 @@ namespace PrettyLinesLib
 
             device.RasterizerState = state;
 
+            effect.Projection = transformationMatrix * Matrix.CreateOrthographicOffCenter(0,
+                                    device.Viewport.Width,
+                                    device.Viewport.Height,
+                                    0,
+                                    0,
+                                    1);
 
             foreach (var pass in effect.CurrentTechnique.Passes)
             {

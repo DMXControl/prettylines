@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -21,6 +22,8 @@ namespace PrettyLines
         private IThick2DLine mouse;
 
         private int wheel;
+
+        private Matrix transform;
 
         public Game1()
         {
@@ -116,6 +119,12 @@ namespace PrettyLines
 
             wheel = mouseState.ScrollWheelValue;
 
+            var translate = Matrix.CreateTranslation(300, 300, 0);
+
+            transform = Matrix.Invert(translate) * 
+                Matrix.CreateRotationZ((float) (0.2f * Math.PI * gameTime.TotalGameTime.TotalSeconds)) *
+                translate
+
             base.Update(gameTime);
         }
 
@@ -131,10 +140,10 @@ namespace PrettyLines
 
             foreach (var line in lines)
             {
-                line.Draw();
+                line.Draw(transform);
             }
 
-            mouse.Draw();
+            mouse.Draw(transform);
 
             base.Draw(gameTime);
         }
