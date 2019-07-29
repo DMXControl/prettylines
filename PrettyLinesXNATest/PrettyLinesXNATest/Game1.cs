@@ -121,9 +121,9 @@ namespace PrettyLines
 
             var translate = Matrix.CreateTranslation(300, 300, 0);
 
-            transform = Matrix.Invert(translate) * 
-                Matrix.CreateRotationZ((float) (0.2f * Math.PI * gameTime.TotalGameTime.TotalSeconds)) *
-                translate
+            transform = Matrix.Invert(translate) *
+                        Matrix.CreateRotationZ((float) (0.2f * Math.PI * gameTime.TotalGameTime.TotalSeconds)) *
+                        translate;
 
             base.Update(gameTime);
         }
@@ -140,10 +140,10 @@ namespace PrettyLines
 
             foreach (var line in lines)
             {
-                line.Draw(transform);
+                line.Draw(Matrix.Identity);
             }
 
-            mouse.Draw(transform);
+            mouse.Draw(Matrix.Identity);
 
             base.Draw(gameTime);
         }
