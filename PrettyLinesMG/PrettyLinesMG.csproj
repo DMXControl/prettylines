@@ -58,14 +58,14 @@
     <Compile Include="..\PrettyLinesXNA\2DLines\ThickLine.cs">
       <Link>2DLines\ThickLine.cs</Link>
     </Compile>
-    <Compile Include="..\PrettyLinesXNA\I2DLine.cs">
-      <Link>I2DLine.cs</Link>
-    </Compile>
-    <Compile Include="..\PrettyLinesXNA\IThick2DLine.cs">
-      <Link>IThick2DLine.cs</Link>
+    <Compile Include="..\PrettyLinesXNA\Base2DLine.cs">
+      <Link>2DLines\Base2DLine.cs</Link>
     </Compile>
     <Compile Include="..\PrettyLinesXNA\LineFactory.cs">
       <Link>LineFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\PrettyLinesXNA\Thick2DLine.cs">
+      <Link>2DLines\Thick2DLine.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

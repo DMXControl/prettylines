@@ -3,12 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PrettyLinesLib
 {
-    public class ThickLine : IThick2DLine
+    public class ThickLine : Thick2DLine
     {
-        private readonly BasicEffect effect;
-        private readonly GraphicsDevice device;
-        private readonly VertexBuffer buffer;
-
         private Vector2 start;
         private Vector2 end;
         private Color color;
@@ -16,7 +12,7 @@ namespace PrettyLinesLib
 
         #region Properties
 
-        public Vector2 Start
+        public override Vector2 Start
         {
             get { return start; }
             set
@@ -26,7 +22,7 @@ namespace PrettyLinesLib
             }
         }
 
-        public Vector2 End
+        public override Vector2 End
         {
             get { return end; }
             set
@@ -36,7 +32,7 @@ namespace PrettyLinesLib
             }
         }
 
-        public Color Color
+        public override Color Color
         {
             get { return color; }
             set
@@ -46,7 +42,7 @@ namespace PrettyLinesLib
             }
         }
 
-        public float Thickness
+        public override float Thickness
         {
             get { return thickness; }
             set
@@ -59,7 +55,7 @@ namespace PrettyLinesLib
         #endregion
 
         public ThickLine(Vector2 start, Vector2 end, Color color, float thickness, BasicEffect effect,
-            GraphicsDevice device)
+            GraphicsDevice device, string label = "")
         {
             this.start = start;
             this.end = end;
@@ -67,11 +63,12 @@ namespace PrettyLinesLib
             this.thickness = thickness;
             this.effect = effect;
             this.device = device;
+            this.Label = label;
             buffer = new VertexBuffer(device, typeof(VertexPositionColor), 4, BufferUsage.WriteOnly);
             UpdateBuffer();
         }
 
-        public void Draw(Matrix transformationMatrix)
+        public override void Draw(Matrix transformationMatrix)
         {
             device.SetVertexBuffer(buffer);
 

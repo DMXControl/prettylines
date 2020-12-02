@@ -62,8 +62,8 @@
     <Compile Include="2DLines\RightAngledLine.cs" />
     <Compile Include="2DLines\SimpleLine.cs" />
     <Compile Include="2DLines\ThickLine.cs" />
-    <Compile Include="I2DLine.cs" />
-    <Compile Include="IThick2DLine.cs" />
+    <Compile Include="Base2DLine.cs" />
+    <Compile Include="Thick2DLine.cs" />
     <Compile Include="LineFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

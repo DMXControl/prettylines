@@ -17,11 +17,13 @@ namespace PrettyLines
 
         private LineFactory factory;
 
-        private List<I2DLine> lines;
+        private List<Base2DLine> lines;
 
-        private IThick2DLine mouse;
+        private Thick2DLine mouse;
 
         private int wheel;
+
+        private SpriteFont font;
 
         private Matrix transform;
 
@@ -43,16 +45,16 @@ namespace PrettyLines
 
             factory = new LineFactory(graphics.GraphicsDevice);
 
-            lines = new List<I2DLine>();
+            lines = new List<Base2DLine>();
 
-            lines.Add(factory.GetSimpleLine(new Vector2(100, 100), new Vector2(200, 200), Color.Red));
-            lines.Add(factory.GetThickLine(new Vector2(200, 200), new Vector2(300, 100), Color.Red, 5));
-            lines.Add(factory.GetBezierCurve(new Vector2(200, 300), new Vector2(100, 200), Color.Red, 5));
-            lines.Add(factory.GetBezierCurve(new Vector2(200, 300), new Vector2(300, 200), Color.Red, 5));
+            lines.Add(factory.GetSimpleLine(new Vector2(100, 100), new Vector2(200, 200), Color.Red, "Label"));
+            lines.Add(factory.GetThickLine(new Vector2(200, 200), new Vector2(300, 100), Color.Red, 5, "Label"));
+            lines.Add(factory.GetBezierCurve(new Vector2(200, 300), new Vector2(100, 200), Color.Red, 5, "Label"));
+            lines.Add(factory.GetBezierCurve(new Vector2(200, 300), new Vector2(300, 200), Color.Red, 5, "Label"));
 
             mouse = factory.GetBezierCurve(
                 new Vector2(graphics.PreferredBackBufferWidth * 0.5f, graphics.PreferredBackBufferHeight * 0.5f),
-                Vector2.Zero, Color.Gray, 5);
+                Vector2.Zero, Color.Gray, 5, "Label");
 
             base.Initialize();
         }
@@ -67,6 +69,8 @@ namespace PrettyLines
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+
+            font = this.Content.Load<SpriteFont>("font");
         }
 
         /// <summary>
@@ -98,13 +102,13 @@ namespace PrettyLines
                 switch (key)
                 {
                     case Keys.NumPad1:
-                        mouse = factory.GetThickLine(mouse.Start, mouse.End, mouse.Color, mouse.Thickness);
+                        mouse = factory.GetThickLine(mouse.Start, mouse.End, mouse.Color, mouse.Thickness, "Label");
                         break;
                     case Keys.NumPad2:
-                        mouse = factory.GetAngledLine(mouse.Start, mouse.End, mouse.Color, mouse.Thickness);
+                        mouse = factory.GetAngledLine(mouse.Start, mouse.End, mouse.Color, mouse.Thickness, "Label");
                         break;
                     case Keys.NumPad3:
-                        mouse = factory.GetBezierCurve(mouse.Start, mouse.End, mouse.Color, mouse.Thickness);
+                        mouse = factory.GetBezierCurve(mouse.Start, mouse.End, mouse.Color, mouse.Thickness, "Label");
                         break;
                 }
             }
@@ -144,6 +148,17 @@ namespace PrettyLines
             }
 
             mouse.Draw(Matrix.Identity);
+
+            spriteBatch.Begin();
+
+            foreach (var line in lines)
+            {
+                line.DrawLabel(font, Color.White);
+            }
+
+            spriteBatch.End();
+
+            mouse.DrawLabel(font, Color.White);
 
             base.Draw(gameTime);
         }
