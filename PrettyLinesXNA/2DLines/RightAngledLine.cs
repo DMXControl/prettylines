@@ -3,18 +3,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PrettyLinesLib
 {
-    public class RightAngledLine : IThick2DLine
+    public class RightAngledLine : Thick2DLine
     {
-        private readonly GraphicsDevice device;
-        private readonly BasicEffect effect;
-        private readonly VertexBuffer buffer;
-
         private Vector2 start;
         private Vector2 end;
         private Color color;
         private float thickness;
 
-        public Vector2 Start
+        public override Vector2 Start
         {
             get { return start; }
             set
@@ -24,7 +20,7 @@ namespace PrettyLinesLib
             }
         }
 
-        public Vector2 End
+        public override Vector2 End
         {
             get { return end; }
             set
@@ -34,7 +30,7 @@ namespace PrettyLinesLib
             }
         }
 
-        public Color Color
+        public override Color Color
         {
             get { return color; }
             set
@@ -44,7 +40,7 @@ namespace PrettyLinesLib
             }
         }
 
-        public float Thickness
+        public override float Thickness
         {
             get { return thickness; }
             set
@@ -55,7 +51,7 @@ namespace PrettyLinesLib
         }
 
         public RightAngledLine(GraphicsDevice device, BasicEffect effect, Vector2 start, Vector2 end, Color color,
-            float thickness)
+            float thickness, string label = "")
         {
             this.device = device;
             this.effect = effect;
@@ -63,29 +59,32 @@ namespace PrettyLinesLib
             this.end = end;
             this.color = color;
             this.thickness = thickness;
+            this.Label = label;
             buffer = new VertexBuffer(device, typeof(VertexPositionColor), 8, BufferUsage.WriteOnly);
             UpdateBuffer();
         }
 
-        public void Draw(Matrix transformationMatrix)
+        public override void Draw(Matrix transformationMatrix)
         {
             device.SetVertexBuffer(buffer);
 
             var temp = device.RasterizerState;
 
-            var state = new RasterizerState();
+            var state = new RasterizerState
+            {
+                MultiSampleAntiAlias = true,
+                CullMode = CullMode.None
+            };
 
-            state.MultiSampleAntiAlias = true;
-            state.CullMode = CullMode.None;
 
             device.RasterizerState = state;
 
             effect.Projection = transformationMatrix * Matrix.CreateOrthographicOffCenter(0,
-                                    device.Viewport.Width,
-                                    device.Viewport.Height,
-                                    0,
-                                    0,
-                                    1);
+                device.Viewport.Width,
+                device.Viewport.Height,
+                0,
+                0,
+                1);
 
             foreach (var pass in effect.CurrentTechnique.Passes)
             {
@@ -140,7 +139,6 @@ namespace PrettyLinesLib
                         new VertexPositionColor(new Vector3(end - addVertical, 0), color),
                     });
                 }
-                
             }
             else
             {
@@ -177,7 +175,6 @@ namespace PrettyLinesLib
                         new VertexPositionColor(new Vector3(end - addVertical, 0), color),
                     });
                 }
-                
             }
         }
     }

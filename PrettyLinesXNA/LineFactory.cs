@@ -22,24 +22,24 @@ namespace PrettyLinesLib
             effect.VertexColorEnabled = true;
         }
 
-        public SimpleLine GetSimpleLine(Vector2 start, Vector2 end, Color color)
+        public SimpleLine GetSimpleLine(Vector2 start, Vector2 end, Color color, string label = "")
         {
-            return new SimpleLine(start, end, color, effect, device);
+            return new SimpleLine(start, end, color, effect, device, label);
         }
 
-        public ThickLine GetThickLine(Vector2 start, Vector2 end, Color color, float thickness)
+        public ThickLine GetThickLine(Vector2 start, Vector2 end, Color color, float thickness, string label = "")
         {
-            return new ThickLine(start, end, color, thickness, effect, device);
+            return new ThickLine(start, end, color, thickness, effect, device, label);
         }
 
-        public BezierCurve GetBezierCurve(Vector2 start, Vector2 end, Color color, float thickness)
+        public BezierCurve GetBezierCurve(Vector2 start, Vector2 end, Color color, float thickness, string label = "")
         {
-            return new BezierCurve(effect, device, start, end, color, 25, thickness);
+            return new BezierCurve(effect, device, start, end, color, 25, thickness, label);
         }
 
-        public RightAngledLine GetAngledLine(Vector2 start, Vector2 end,Color color, float thickness)
+        public RightAngledLine GetAngledLine(Vector2 start, Vector2 end,Color color, float thickness, string label = "")
         {
-            return new RightAngledLine(device, effect, start, end, color, thickness);
+            return new RightAngledLine(device, effect, start, end, color, thickness, label);
         }
     }
 }

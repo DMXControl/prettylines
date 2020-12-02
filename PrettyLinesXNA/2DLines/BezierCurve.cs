@@ -4,12 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PrettyLinesLib
 {
-    public class BezierCurve : IThick2DLine
+    public class BezierCurve : Thick2DLine
     {
-        private readonly BasicEffect effect;
-        private readonly GraphicsDevice device;
-        private VertexBuffer buffer;
-
         private Vector2 start;
         private Vector2 end;
         private Color color;
@@ -18,7 +14,7 @@ namespace PrettyLinesLib
 
         #region Properties
 
-        public Vector2 Start
+        public override Vector2 Start
         {
             get { return start; }
             set
@@ -28,7 +24,7 @@ namespace PrettyLinesLib
             }
         }
 
-        public Vector2 End
+        public override Vector2 End
         {
             get { return end; }
             set
@@ -38,7 +34,7 @@ namespace PrettyLinesLib
             }
         }
 
-        public Color Color
+        public override Color Color
         {
             get { return color; }
             set
@@ -58,7 +54,7 @@ namespace PrettyLinesLib
             }
         }
 
-        public float Thickness
+        public override float Thickness
         {
             get { return thickness; }
             set
@@ -71,7 +67,7 @@ namespace PrettyLinesLib
         #endregion
 
         public BezierCurve(BasicEffect effect, GraphicsDevice device, Vector2 start, Vector2 end, Color color,
-            int segments, float thickness)
+            int segments, float thickness, string label = "")
         {
             this.effect = effect;
             this.device = device;
@@ -80,11 +76,12 @@ namespace PrettyLinesLib
             this.color = color;
             this.segments = segments;
             this.thickness = thickness;
+            this.Label = label;
             buffer = new VertexBuffer(device, typeof(VertexPositionColor), segments * 2 + 2, BufferUsage.WriteOnly);
             UpdateBuffer();
         }
 
-        public void Draw(Matrix transformationMatrix)
+        public override void Draw(Matrix transformationMatrix)
         {
             device.SetVertexBuffer(buffer);
 

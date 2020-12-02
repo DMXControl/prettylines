@@ -3,19 +3,15 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PrettyLinesLib
 {
-    public class SimpleLine : I2DLine
+    public class SimpleLine : Base2DLine
     {
-        private readonly BasicEffect effect;
-        private readonly GraphicsDevice device;
-        private readonly VertexBuffer buffer;
-
         private Vector2 start;
         private Vector2 end;
         private Color color;
 
         #region Properties
 
-        public Vector2 Start
+        public override Vector2 Start
         {
             get { return start; }
             set
@@ -25,7 +21,7 @@ namespace PrettyLinesLib
             }
         }
 
-        public Vector2 End
+        public override Vector2 End
         {
             get { return end; }
             set
@@ -35,7 +31,7 @@ namespace PrettyLinesLib
             }
         }
 
-        public Color Color
+        public override Color Color
         {
             get { return color; }
             set
@@ -47,18 +43,19 @@ namespace PrettyLinesLib
 
         #endregion
 
-        public SimpleLine(Vector2 start, Vector2 end, Color color, BasicEffect effect, GraphicsDevice device)
+        public SimpleLine(Vector2 start, Vector2 end, Color color, BasicEffect effect, GraphicsDevice device, string label = "")
         {
             this.start = start;
             this.end = end;
             this.color = color;
             this.effect = effect;
             this.device = device;
+            this.Label = label;
             buffer = new VertexBuffer(device, typeof(VertexPositionColor), 2, BufferUsage.WriteOnly);
             UpdateBuffer();
         }
 
-        public void Draw(Matrix transformationMatrix)
+        public override void Draw(Matrix transformationMatrix)
         {
             device.SetVertexBuffer(buffer);
 
