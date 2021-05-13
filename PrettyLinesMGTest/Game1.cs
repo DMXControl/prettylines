@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -126,7 +126,7 @@ namespace PrettyLines
             var translate = Matrix.CreateTranslation(300, 300, 0);
 
             transform = Matrix.Invert(translate) *
-                        Matrix.CreateRotationZ((float) (0.2f * Math.PI * gameTime.TotalGameTime.TotalSeconds)) *
+                        Matrix.CreateRotationZ((float)(0.2f * Math.PI * gameTime.TotalGameTime.TotalSeconds)) *
                         translate;
 
             base.Update(gameTime);
